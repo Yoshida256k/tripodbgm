@@ -1,0 +1,199 @@
+:root {
+  --bg: #0d1117;
+  --panel: #161b22;
+  --panel2: #1f2630;
+  --line: #30363d;
+  --text: #e6edf3;
+  --dim: #8b949e;
+  --accent: #f0b429;
+  --accent-text: #1a1200;
+  --ok: #3fb950;
+  --warn: #f85149;
+  --bgm: #58a6ff;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 15px/1.5 system-ui, -apple-system, "Segoe UI", "Hiragino Sans", "Noto Sans JP", sans-serif;
+  padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+}
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+  padding: calc(10px + env(safe-area-inset-top, 0px)) 16px 0;
+}
+
+main, header > * { max-width: 680px; margin-inline: auto; }
+main { padding: 12px 16px; }
+
+h1 { font-size: 17px; margin: 0; flex: 1; }
+h2 { font-size: 15px; margin: 20px 0 8px; color: var(--dim); }
+
+.row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.row.center { justify-content: center; }
+.status { margin: 6px 0; min-height: 28px; }
+.dim { color: var(--dim); }
+.warn { color: var(--warn); }
+.hint { font-size: 13px; margin: 4px 0 12px; }
+
+button, .button {
+  font: inherit;
+  color: var(--text);
+  background: var(--panel2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 7px 14px;
+  cursor: pointer;
+  display: inline-block;
+}
+button:disabled { opacity: 0.45; cursor: default; }
+button.primary { background: var(--accent); color: var(--accent-text); border-color: var(--accent); font-weight: 600; }
+button.small { padding: 3px 10px; font-size: 13px; }
+button.icon { padding: 4px 10px; min-width: 38px; }
+button.danger { color: var(--warn); }
+
+.scene {
+  background: var(--panel2);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 1px 10px;
+  font-size: 13px;
+}
+
+.storage { display: flex; align-items: center; gap: 10px; font-size: 12px; margin-bottom: 6px; }
+.storage .bar { flex: 1; height: 6px; background: var(--panel2); border-radius: 3px; overflow: hidden; }
+.storage .bar div { height: 100%; background: var(--bgm); width: 0; }
+
+.tabs { display: flex; gap: 0; }
+.tabs button {
+  flex: 1;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  border-radius: 0;
+  padding: 9px 0;
+  color: var(--dim);
+}
+.tabs button.active { color: var(--text); border-bottom-color: var(--accent); }
+
+.intro p { margin: 10px 0; }
+code { background: var(--panel2); padding: 0 5px; border-radius: 4px; }
+
+/* 場面のカード */
+.slot {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+}
+.slot.now { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; }
+.slot-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
+.slot-head .name { font-weight: 600; flex: 1; }
+.tag { font-size: 11px; padding: 1px 7px; border-radius: 999px; border: 1px solid var(--line); color: var(--dim); }
+.tag.bgm { color: var(--bgm); border-color: var(--bgm); }
+.tag.random { color: var(--accent); border-color: var(--accent); }
+.tag.now { background: var(--accent); color: var(--accent-text); border-color: var(--accent); }
+.empty { color: var(--dim); font-size: 13px; padding: 4px 0; }
+.mode-opt { display: flex; gap: 10px; align-items: flex-start; padding: 6px 0; cursor: pointer; }
+.mode-opt input { margin-top: 3px; accent-color: var(--accent); }
+.mode-opt > span { display: flex; flex-direction: column; gap: 2px; }
+.mode-opt .dim { font-size: 13px; }
+
+.cand {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  grid-template-areas: "src play del" "vol vol vol";
+  gap: 4px 6px;
+  align-items: center;
+  padding: 8px 0;
+  border-top: 1px solid var(--line);
+}
+.cand select { grid-area: src; min-width: 0; }
+.cand .play { grid-area: play; }
+.cand .del { grid-area: del; }
+.cand .vol { grid-area: vol; display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--dim); }
+.cand .vol input { flex: 1; accent-color: var(--accent); }
+.cand .vol span { width: 3.2em; text-align: right; }
+.cand.missing select { border-color: var(--warn); color: var(--warn); }
+@media (min-width: 560px) {
+  .cand { grid-template-columns: minmax(0, 1fr) 190px auto auto; grid-template-areas: "src vol play del"; }
+}
+
+select {
+  font: inherit;
+  color: var(--text);
+  background: var(--panel2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 6px 8px;
+  width: 100%;
+}
+
+/* 音源 */
+.drop {
+  border: 2px dashed var(--line);
+  border-radius: 12px;
+  padding: 14px;
+  text-align: center;
+}
+.drop.over { border-color: var(--accent); background: var(--panel); }
+.drop p { margin: 6px 0; }
+
+.file, .upload {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line);
+}
+.file .name, .upload .name { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.file .size { color: var(--dim); font-size: 13px; white-space: nowrap; }
+.file .used { font-size: 11px; color: var(--ok); white-space: nowrap; }
+.file .kind { font-size: 11px; color: var(--dim); white-space: nowrap; }
+.file .kind.bgm { color: var(--accent); }
+.upload .prog { width: 90px; height: 6px; background: var(--panel2); border-radius: 3px; overflow: hidden; flex: none; }
+.upload .prog div { height: 100%; background: var(--accent); width: 0; }
+.upload .msg { font-size: 12px; width: 5.5em; text-align: right; color: var(--dim); }
+.upload.done .msg { color: var(--ok); }
+.upload.fail .msg { color: var(--warn); }
+
+footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--panel);
+  border-top: 1px solid var(--line);
+  padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  justify-content: center;
+}
+footer > * { max-width: 680px; }
+footer { gap: 12px; align-items: center; }
+footer #save-msg { flex: 1; max-width: 480px; font-size: 13px; }
+footer.dirty #save-msg { color: var(--accent); }
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%);
+  background: var(--panel2);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 8px 14px;
+  max-width: calc(100% - 32px);
+  z-index: 20;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+.toast.error { border-color: var(--warn); color: var(--warn); }

@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>トライポッド サウンド設定</title>
+  <meta name="theme-color" content="#0d1117">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <div class="row">
+      <h1>トライポッド サウンド設定</h1>
+      <button id="connect" class="primary">接続</button>
+    </div>
+    <div class="row status">
+      <span id="link-status" class="dim">未接続</span>
+      <span id="scene" class="scene" hidden></span>
+      <button id="stop" class="small" hidden title="試聴をやめる">■ 停止</button>
+    </div>
+    <div id="storage" class="storage" hidden>
+      <div class="bar"><div id="storage-used"></div></div>
+      <span id="storage-text" class="dim"></span>
+    </div>
+    <nav class="tabs" hidden>
+      <button data-tab="scenes" class="active">場面</button>
+      <button data-tab="sounds">音源</button>
+    </nav>
+  </header>
+
+  <main>
+    <section id="intro" class="intro">
+      <p>YD-RP2040（本番プログラム <code>game</code>）をUSBでつないで、「接続」を押してください。</p>
+      <p class="dim">PC は Chrome / Edge（Web Serial）、Android は Chrome（WebUSB）で使えます。
+        PC で Serial Monitor を開いていると接続できないので、閉じてから接続してください。</p>
+      <p id="unsupported" class="warn" hidden>このブラウザは USB シリアルに対応していません。Chrome か Edge を使ってください。</p>
+    </section>
+
+    <section id="tab-scenes" hidden>
+      <p class="dim hint">場面ごとに鳴らす音を選びます。候補を2つ以上入れると、鳴るたびにランダムに選びます（前回と同じものは避けます）。</p>
+      <div id="slot-list"></div>
+    </section>
+
+    <section id="tab-sounds" hidden>
+      <div id="drop" class="drop">
+        <p>音のファイル（MP3・WAV など）をここにドラッグ＆ドロップ</p>
+        <div class="row center">
+          <label class="button">ファイルを選ぶ<input id="pick-files" type="file" accept=".mp3,.wav,.m4a,.aac,.ogg,.oga,.opus,.flac,audio/*" multiple hidden></label>
+          <label class="button">フォルダごと選ぶ<input id="pick-dir" type="file" webkitdirectory multiple hidden></label>
+        </div>
+        <p class="dim">30秒以下のものは WAV に変換して送ります（どの場面でも使えます）。それより長い MP3 はそのまま送り、BGM の場面だけで使えます。マイコンは MP3 を同時に1つしか鳴らせないためです。</p>
+        <p class="dim">転送中はマイコンの音が止まります。同じ名前のファイルは上書きします。</p>
+      </div>
+      <div id="upload-list"></div>
+      <h2>マイコンに入っている音源</h2>
+      <div id="file-list"></div>
+    </section>
+  </main>
+
+  <footer id="save-bar" hidden>
+    <span id="save-msg" class="dim">変更はありません</span>
+    <button id="save" class="primary" disabled>マイコンに保存</button>
+  </footer>
+
+  <div id="toast" class="toast" hidden></div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
