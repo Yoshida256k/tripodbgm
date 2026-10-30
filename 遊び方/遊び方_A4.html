@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>トライポッドの遊び方</title>
+<!--
+  来場者向けの遊び方シート（A4 縦 1 枚）。筐体の近くに置く。
+  印刷用の PDF は 遊び方_A4.pdf。この HTML を直したら PDF も作り直す：
+  Chrome / Edge で開いて印刷 → 送信先「PDF に保存」、用紙 A4、余白「なし」、「背景のグラフィック」にチェック。
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4; margin: 0; }
+
+  :root {
+    --ink: #1f2330;
+    --muted: #535a6a;
+    --line: #d6dbe3;
+    --paper: #ffffff;
+    --green: #17a865;
+    --green-deep: #0b6e42;
+    --green-tint: #e7f8ef;
+    --cyan: #36bfe9;
+    --cyan-deep: #0a7fa9;
+    --gold: #e8b923;
+    --gold-deep: #7d5d00;
+    --gold-tint: #fff5d4;
+    --blue: #2e64f0;
+    --blue-deep: #1a3fae;
+    --blue-tint: #edf2ff;
+    --hit: #e2405e;
+    --hit-deep: #a51d3a;
+    --hit-tint: #fff0f3;
+    --miss: #6f66a3;
+    --miss-deep: #463e7a;
+    --miss-tint: #f3f1fa;
+    --warn: #d9661f;
+    --warn-tint: #fff2e8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { background: #8a8f99; }
+  body {
+    background: #8a8f99;
+    color: var(--ink);
+    font-family: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "BIZ UDPGothic", "Meiryo", sans-serif;
+    font-weight: 500;
+    line-height: 1.45;
+    font-feature-settings: "palt" 1;
+    word-break: auto-phrase;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .sheet {
+    width: 210mm;
+    height: 297mm;
+    margin: 10mm auto;
+    padding: 9mm 10mm 7mm;
+    background: var(--paper);
+    box-shadow: 0 2mm 8mm rgba(0, 0, 0, .25);
+    display: flex;
+    flex-direction: column;
+    gap: 3.4mm;
+    overflow: hidden;
+  }
+
+  @media print {
+    html, body { background: var(--paper); }
+    .sheet { margin: 0; box-shadow: none; }
+  }
+
+  ruby rt { font-size: .45em; font-weight: 700; letter-spacing: 0; }
+  b { font-weight: 900; }
+
+  /* ---- 見出し ---- */
+  .hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6mm;
+    padding: 3mm 5mm 3mm 6mm;
+    border-radius: 5mm;
+    background: linear-gradient(100deg, var(--green-tint) 0%, #eaf6ff 55%, var(--gold-tint) 100%);
+    border: .5mm solid #cfe9dc;
+  }
+  .eyebrow {
+    display: inline-block;
+    font-size: 3.4mm;
+    font-weight: 700;
+    color: var(--green-deep);
+    letter-spacing: .05em;
+  }
+  h1 {
+    font-size: 11.5mm;
+    font-weight: 900;
+    line-height: 1.15;
+    letter-spacing: -.02em;
+    margin: .6mm 0 1.2mm;
+  }
+  h1 .sub { font-size: 8.6mm; }
+  .lead { font-size: 4.8mm; font-weight: 700; }
+  .lead b { color: var(--hit-deep); }
+  .badge {
+    flex: none;
+    width: 25mm;
+    height: 25mm;
+    border-radius: 50%;
+    background: var(--blue);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.05;
+    border: 1.2mm solid #fff;
+    box-shadow: 0 0 0 .5mm var(--blue-deep);
+  }
+  .badge span { font-size: 3.3mm; font-weight: 700; }
+  .badge b { font-size: 10mm; line-height: 1; }
+
+  /* ---- どんなゲーム？ ---- */
+  .overview {
+    display: grid;
+    grid-template-columns: 94mm 1fr;
+    gap: 4mm;
+    align-items: center;
+  }
+  .machine { width: 94mm; height: auto; display: block; }
+  .about h2 {
+    font-size: 5.6mm;
+    font-weight: 900;
+    margin-bottom: 1.2mm;
+  }
+  .about p { font-size: 3.9mm; margin-bottom: 2.4mm; }
+  .facts { display: grid; gap: 1.5mm; }
+  .facts div {
+    display: grid;
+    grid-template-columns: 19mm 1fr;
+    align-items: center;
+    border: .4mm solid var(--line);
+    border-radius: 2.5mm;
+    overflow: hidden;
+  }
+  .facts dt {
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--ink);
+    color: #fff;
+    font-size: 3.3mm;
+    font-weight: 700;
+    padding: 1.2mm 0;
+  }
+  .facts dd { font-size: 3.9mm; padding: .8mm 3mm; }
+  .facts dd b { font-size: 4.8mm; }
+  .facts .f-hit dt { background: var(--hit-deep); }
+  .facts .f-speed dt { background: var(--cyan-deep); }
+  .facts .f-btn dt { background: var(--blue-deep); }
+
+  /* ---- ステップ ---- */
+  .steps { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; }
+  .step, .result {
+    border: .6mm solid var(--line);
+    border-radius: 4mm;
+    padding: 2.8mm 3.6mm 3mm;
+  }
+  .step-head, .result-head {
+    display: flex;
+    align-items: center;
+    gap: 2.4mm;
+    margin-bottom: 1.6mm;
+  }
+  .num {
+    flex: none;
+    width: 8.4mm;
+    height: 8.4mm;
+    border-radius: 50%;
+    background: var(--blue);
+    color: #fff;
+    font-size: 5.2mm;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+  .step h3, .result h3 { font-size: 5.2mm; font-weight: 900; line-height: 1.25; }
+  .step-body { display: grid; grid-template-columns: 29mm 1fr; gap: 3mm; align-items: start; }
+  .mini { width: 29mm; height: auto; display: block; }
+  .step-body p { font-size: 3.9mm; }
+  .step-body p + p { margin-top: 1.6mm; }
+  .note {
+    font-size: 3.3mm !important;
+    line-height: 1.4;
+    border-radius: 2mm;
+    padding: 1.3mm 2.2mm;
+  }
+  .note b { display: block; font-size: 3.4mm; }
+  .note-green { background: var(--green-tint); color: var(--green-deep); }
+  .note-gold { background: var(--gold-tint); color: var(--gold-deep); }
+
+  /* ---- 結果 ---- */
+  .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3mm; }
+  .res {
+    border-radius: 3mm;
+    padding: 2.2mm 3.2mm 2.4mm;
+    display: grid;
+    grid-template-columns: 19mm 1fr;
+    column-gap: 3mm;
+    row-gap: 1.2mm;
+    align-items: center;
+  }
+  .res.hit { background: var(--hit-tint); border: .5mm solid #f5b5c2; }
+  .res.miss { background: var(--miss-tint); border: .5mm solid #cfc9e8; }
+  .lamp { width: 19mm; height: auto; display: block; }
+  .res .if { font-size: 3.5mm; font-weight: 700; color: var(--muted); }
+  .res .verdict { font-size: 7.6mm; font-weight: 900; line-height: 1.1; }
+  .res.hit .verdict { color: var(--hit-deep); }
+  .res.miss .verdict { color: var(--miss-deep); }
+  .beat { display: flex; align-items: center; gap: 1mm; margin-top: .8mm; }
+  .beat i {
+    width: 3.2mm;
+    height: 3.2mm;
+    border-radius: 1mm;
+    border: .45mm solid var(--cyan-deep);
+    background: #fff;
+  }
+  .beat i.on { background: var(--cyan); }
+  .beat small { font-size: 2.9mm; color: var(--muted); margin-left: 1mm; font-weight: 700; }
+  .res .then { grid-column: 1 / -1; font-size: 3.8mm; }
+  .res .then b { font-size: 4.1mm; }
+  .res .aside {
+    grid-column: 1 / -1;
+    font-size: 3.2mm;
+    color: var(--muted);
+    border-top: .35mm dashed rgba(0, 0, 0, .18);
+    padding-top: 1.2mm;
+  }
+
+  /* ---- おねがい ---- */
+  .rules h2 {
+    font-size: 5mm;
+    font-weight: 900;
+    margin-bottom: 1.6mm;
+    display: flex;
+    align-items: center;
+    gap: 2mm;
+  }
+  .rules h2::after { content: ""; flex: 1; height: .5mm; background: var(--line); }
+  .rules ul { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 2mm 5mm; }
+  .rules li { display: grid; grid-template-columns: 10mm 1fr; gap: 2.6mm; align-items: center; }
+  .icon {
+    width: 10mm;
+    height: 10mm;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .icon svg { width: 6.4mm; height: 6.4mm; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .i-blue { background: var(--blue-tint); color: var(--blue-deep); }
+  .i-red { background: var(--hit-tint); color: var(--hit-deep); }
+  .i-warn { background: var(--warn-tint); color: var(--warn); }
+  .i-green { background: var(--green-tint); color: var(--green-deep); }
+  .rules strong { display: block; font-size: 3.9mm; font-weight: 900; line-height: 1.3; }
+  .rules span { display: block; font-size: 3.3mm; color: var(--muted); line-height: 1.35; }
+
+  footer {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    font-size: 2.8mm;
+    color: var(--muted);
+    border-top: .3mm solid var(--line);
+    padding-top: 1.6mm;
+  }
+
+  /* SVG の文字 */
+  .lbl { font-family: inherit; font-weight: 900; fill: var(--ink); }
+  .lbl-sub { font-family: inherit; font-weight: 700; fill: var(--muted); }
+  .leader { stroke: var(--ink); stroke-width: 1.6; fill: none; }
+  .halo { stroke: #fff; stroke-width: 5; fill: none; }
+</style>
+</head>
+<body>
+
+<!-- ルーレットの部品（下の図で使い回す） -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <!-- 1 マス（真上の位置）。外径 100、内径 68 -->
+    <path id="cell" d="M -27.56 -96.13 A 100 100 0 0 1 27.56 -96.13 L 18.74 -65.37 A 68 68 0 0 0 -18.74 -65.37 Z"/>
+    <rect id="spoke" x="-4.5" y="-67" width="9" height="40" rx="2"/>
+    <!-- 金の矢印（真下、中心向き） -->
+    <path id="arrow" d="M 0 103 L 14 118 L 6 118 L 6 137 L -6 137 L -6 118 L -14 118 Z"/>
+    <marker id="ah" viewBox="0 0 10 10" refX="4" refY="5" markerWidth="4" markerHeight="4" orient="auto">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#0a7fa9"/>
+    </marker>
+
+    <g id="ring">
+      <g fill="#f5f7f6" stroke="#bfccc5" stroke-width="1.5">
+        <use href="#spoke"/>
+        <use href="#spoke" transform="rotate(45)"/>
+        <use href="#spoke" transform="rotate(90)"/>
+        <use href="#spoke" transform="rotate(135)"/>
+        <use href="#spoke" transform="rotate(180)"/>
+        <use href="#spoke" transform="rotate(225)"/>
+        <use href="#spoke" transform="rotate(270)"/>
+        <use href="#spoke" transform="rotate(315)"/>
+      </g>
+      <circle r="84" fill="none" stroke="#e6f7ee" stroke-width="32"/>
+      <circle r="100" fill="none" stroke="#9ad9bb" stroke-width="1.5"/>
+      <circle r="68" fill="none" stroke="#9ad9bb" stroke-width="1.5"/>
+      <g fill="#c6efda" stroke="#17a865" stroke-width="2.4" stroke-linejoin="round">
+        <use href="#cell"/>
+        <use href="#cell" transform="rotate(45)"/>
+        <use href="#cell" transform="rotate(90)"/>
+        <use href="#cell" transform="rotate(135)"/>
+        <use href="#cell" transform="rotate(180)"/>
+        <use href="#cell" transform="rotate(225)"/>
+        <use href="#cell" transform="rotate(270)"/>
+        <use href="#cell" transform="rotate(315)"/>
+      </g>
+      <g fill="#e8b923" stroke="#8a6700" stroke-width="1.8" stroke-linejoin="round">
+        <use href="#arrow"/>
+        <use href="#arrow" transform="rotate(45)"/>
+        <use href="#arrow" transform="rotate(-45)"/>
+      </g>
+      <!-- 景品 -->
+      <g stroke="#b3294a" stroke-width="1.8" stroke-linejoin="round">
+        <path d="M 0 -12 C -7 -23 -17 -17 0 -12 Z M 0 -12 C 7 -23 17 -17 0 -12 Z" fill="#ffd34d"/>
+        <rect x="-13" y="-6" width="26" height="18" rx="2.5" fill="#ff8fa6"/>
+        <rect x="-15.5" y="-12" width="31" height="7" rx="2" fill="#ffb7c6"/>
+        <path d="M 0 -12 V 12" stroke="#ffd34d" stroke-width="5"/>
+      </g>
+    </g>
+
+    <!-- 光っているマス（水色） -->
+    <g id="lit">
+      <use href="#cell" fill="none" stroke="#36bfe9" stroke-width="11" stroke-opacity=".35" stroke-linejoin="round"/>
+      <use href="#cell" fill="#7fd9f5" stroke="#0a7fa9" stroke-width="2.6" stroke-linejoin="round"/>
+    </g>
+
+    <linearGradient id="rainbow" gradientUnits="userSpaceOnUse" x1="0" y1="-118" x2="0" y2="146">
+      <stop offset="0" stop-color="#ff4d4d"/>
+      <stop offset=".18" stop-color="#ffa62b"/>
+      <stop offset=".36" stop-color="#ffe14d"/>
+      <stop offset=".54" stop-color="#3ddc84"/>
+      <stop offset=".72" stop-color="#3bb3ff"/>
+      <stop offset="1" stop-color="#b45cff"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<main class="sheet">
+
+  <header class="hero">
+    <div>
+      <p class="eyebrow">ボタン1つで遊べる、光のルーレット</p>
+      <h1>トライポッド<span class="sub">の遊び方</span></h1>
+      <p class="lead">光を止めて、<b><ruby>景品<rt>けいひん</rt></ruby>をゲット</b>しよう！</p>
+    </div>
+    <div class="badge" aria-label="かんたん3ステップ"><span>かんたん</span><b>3</b><span>ステップ</span></div>
+  </header>
+
+  <section class="overview">
+    <svg class="machine" viewBox="-245 -130 490 352" role="img"
+         aria-label="上から見た図。8マスのルーレットの手前に金の矢印が3つあり、まん中に景品、台の手前に青い大ボタンがある">
+      <rect x="-128" y="-124" width="256" height="276" rx="10" fill="#f1f2f5" stroke="#a3aab6" stroke-width="2"/>
+      <line x1="-128" y1="-116" x2="-128" y2="144" stroke="url(#rainbow)" stroke-width="5" stroke-dasharray="3 4"/>
+      <line x1="128" y1="-116" x2="128" y2="144" stroke="url(#rainbow)" stroke-width="5" stroke-dasharray="3 4"/>
+      <use href="#ring"/>
+      <use href="#lit" transform="rotate(90)"/>
+
+      <!-- 青い大ボタン -->
+      <g transform="translate(0 190)">
+        <rect x="-31" y="-29" width="62" height="58" rx="6" fill="#3a3d47" stroke="#22242b" stroke-width="2"/>
+        <circle r="22" fill="#141a2b"/>
+        <circle r="17.5" fill="#2e64f0"/>
+        <ellipse cx="-5" cy="-6.5" rx="7.5" ry="4" fill="#fff" opacity=".55"/>
+      </g>
+
+      <!-- 説明の線 -->
+      <path class="halo" d="M -150 -84 L -96 -84 L -62 -60"/>
+      <path class="leader" d="M -150 -84 L -96 -84 L -62 -60"/>
+      <circle cx="-62" cy="-60" r="3.5" fill="#1f2330"/>
+      <text class="lbl" x="-242" y="-90" font-size="20">ルーレット</text>
+      <text class="lbl-sub" x="-242" y="-68" font-size="15">ぜんぶで 8マス</text>
+
+      <path class="halo" d="M 150 -84 L 100 -84 L 15 -8"/>
+      <path class="leader" d="M 150 -84 L 100 -84 L 15 -8"/>
+      <circle cx="15" cy="-8" r="3.5" fill="#1f2330"/>
+      <text class="lbl" x="156" y="-90" font-size="20">景品</text>
+      <text class="lbl-sub" x="156" y="-68" font-size="15">まん中</text>
+
+      <path class="halo" d="M -150 104 L -112 104 L -96 96"/>
+      <path class="leader" d="M -150 104 L -112 104 L -96 96"/>
+      <circle cx="-96" cy="96" r="3.5" fill="#1f2330"/>
+      <text class="lbl" x="-242" y="98" font-size="20">金の矢印</text>
+      <text class="lbl-sub" x="-242" y="120" font-size="15">アームの場所</text>
+      <text class="lbl-sub" x="-242" y="139" font-size="15">（3か所）</text>
+
+      <path class="leader" d="M 40 190 L 70 190"/>
+      <circle cx="40" cy="190" r="3.5" fill="#1f2330"/>
+      <text class="lbl" x="76" y="186" font-size="20">青い大ボタン</text>
+      <text class="lbl-sub" x="76" y="207" font-size="15">これをおすだけ！</text>
+    </svg>
+
+    <div class="about">
+      <h2>どんなゲーム？</h2>
+      <p>ルーレットのまわりを、光がすごい速さでぐるぐる回ります。
+        <b>青い大ボタン</b>で光を止めて、当たりのマスに止まれば、<b>アームが動いて<ruby>景品<rt>けいひん</rt></ruby>が落ちてくる！</b></p>
+      <dl class="facts">
+        <div class="f-hit"><dt>当たり</dt><dd>8マスのうち <b>3マス</b></dd></div>
+        <div class="f-speed"><dt>光の速さ</dt><dd>1周 <b>約0.5秒</b></dd></div>
+        <div class="f-btn"><dt>そうさ</dt><dd>大ボタン <b>1つだけ</b></dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="steps">
+    <article class="step">
+      <div class="step-head"><div class="num">1</div><h3>ボタンをおす</h3></div>
+      <div class="step-body">
+        <svg class="mini" viewBox="-122 -124 244 266" role="img" aria-label="光がルーレットを回っている図">
+          <use href="#ring"/>
+          <use href="#lit" transform="rotate(-45)" opacity=".28"/>
+          <use href="#lit" transform="rotate(0)" opacity=".6"/>
+          <use href="#lit" transform="rotate(45)"/>
+          <path d="M -79.4 -79.4 A 112.3 112.3 0 0 1 52.5 -99.3" fill="none" stroke="#0a7fa9" stroke-width="5" stroke-linecap="round" marker-end="url(#ah)"/>
+        </svg>
+        <div>
+          <p>青い大ボタンをおすと、光が<b>ぐるぐる回りだす</b>。</p>
+          <p class="note note-green"><b>ルーレットが緑に光っていないときは</b>1回目は緑に光るだけ（じゅんびOK）。もう1回おすと回りだすよ。</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="step">
+      <div class="step-head"><div class="num">2</div><h3>もう一度おして止める</h3></div>
+      <div class="step-body">
+        <svg class="mini" viewBox="-122 -124 244 266" role="img" aria-label="光が1マスで止まった図">
+          <use href="#ring"/>
+          <use href="#lit" transform="rotate(45)"/>
+          <g stroke="#0a7fa9" stroke-width="5" stroke-linecap="round">
+            <line x1="38.3" y1="-92.4" x2="44.8" y2="-108.2"/>
+            <line x1="76.4" y1="-76.4" x2="88.4" y2="-88.4"/>
+            <line x1="92.4" y1="-38.3" x2="108.2" y2="-44.8"/>
+          </g>
+        </svg>
+        <div>
+          <p>「ここだ！」と思ったら、もう一度おす。光が<b>ピタッと止まる</b>。</p>
+          <p class="note note-gold"><b>コツ</b>光は目で追いきれない速さ。回るリズムをつかんでおそう！</p>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <section class="result">
+    <div class="result-head"><div class="num">3</div><h3>止まったマスのランプを見る</h3></div>
+    <div class="result-grid">
+      <div class="res hit">
+        <svg class="lamp" viewBox="-52 -122 104 66" role="img" aria-label="ランプが点滅している図">
+          <g stroke="#a51d3a" stroke-width="4" stroke-linecap="round">
+            <line x1="0" y1="-104" x2="0" y2="-117"/>
+            <line x1="-36" y1="-100" x2="-43" y2="-111"/>
+            <line x1="36" y1="-100" x2="43" y2="-111"/>
+            <line x1="-36" y1="-76" x2="-48" y2="-78"/>
+            <line x1="36" y1="-76" x2="48" y2="-78"/>
+          </g>
+          <use href="#lit"/>
+        </svg>
+        <div>
+          <div class="if">ランプが チカチカ<ruby>点滅<rt>てんめつ</rt></ruby>したら</div>
+          <div class="verdict">あたり！</div>
+          <div class="beat"><i class="on"></i><i></i><i class="on"></i><i></i><i class="on"></i><i></i><small>点く・消える</small></div>
+        </div>
+        <p class="then"><b>金の矢印のアームが動いて、<ruby>景品<rt>けいひん</rt></ruby>が落ちてくる！</b>音と光でお祝いだ。</p>
+        <p class="aside">当たったら、近くの<ruby>係員<rt>かかりいん</rt></ruby>に声をかけてね。係員がいないときは、もどるまで少し待ってね。</p>
+      </div>
+
+      <div class="res miss">
+        <svg class="lamp" viewBox="-52 -122 104 66" role="img" aria-label="ランプが点いたままの図">
+          <use href="#lit"/>
+        </svg>
+        <div>
+          <div class="if">ランプが 点いたままなら</div>
+          <div class="verdict">ハズレ</div>
+          <div class="beat"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><small>ずっと点いたまま</small></div>
+        </div>
+        <p class="then"><b>ざんねん！</b>ボタンをおせば、すぐに<b>もう一度回せる</b>よ。</p>
+        <p class="aside">うしろに人が並んでいたら、交代してね。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="rules">
+    <h2>おねがい</h2>
+    <ul>
+      <li>
+        <div class="icon i-blue"><svg viewBox="0 0 24 24"><path d="M4 20h16"/><path d="M5.5 20v-2.5h13V20"/><path d="M7.5 17.5a4.5 4.5 0 0 1 9 0"/><path d="M12 3v6"/><path d="M9.5 6.5 12 9l2.5-2.5"/></svg></div>
+        <div><strong>ボタンはやさしくおしてね</strong><span>たたいたり、上に乗ったりしないでね。</span></div>
+      </li>
+      <li>
+        <div class="icon i-red"><svg viewBox="0 0 24 24"><path d="M9 12.5V8"/><path d="M11.5 11.5V6.5"/><path d="M14 11.5V7"/><path d="M16.5 12.5v-3"/><path d="M8.5 12.5c0 3.5 1.5 5.5 4.5 5.5s4-2 4-5.5"/><circle cx="12" cy="12" r="10"/><path d="m5 5 14 14"/></svg></div>
+        <div><strong>ルーレットの中に手を入れないでね</strong><span>電気の<ruby>配線<rt>はいせん</rt></ruby>と、動く部品があります。</span></div>
+      </li>
+      <li>
+        <div class="icon i-warn"><svg viewBox="0 0 24 24"><path d="M11 2.5 4.5 13H10l-1.5 8.5L15 11H9.5z"/><path d="M18 9.5a3.5 3.5 0 0 1 0 5"/><path d="M20.5 7a7 7 0 0 1 0 10"/></svg></div>
+        <div><strong>光の<ruby>点滅<rt>てんめつ</rt></ruby>と、大きな音が出ます</strong><span>苦手な方は、ご注意ください。</span></div>
+      </li>
+      <li>
+        <div class="icon i-green"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3 20.5c0-3.6 2.7-6.2 6-6.2s6 2.6 6 6.2"/><path d="M15.5 4.6a2.7 2.7 0 1 1 3.4 2.6c-.7.3-.9.8-.9 1.6"/><path d="M18 11.6v.1"/></svg></div>
+        <div><strong>動かない・困ったときは</strong><span>近くの<ruby>係員<rt>かかりいん</rt></ruby>に声をかけてね。</span></div>
+      </li>
+    </ul>
+  </section>
+
+  <footer>
+    <span>トライポッド爆音光化</span>
+    <span>2026年度 高専祭</span>
+  </footer>
+
+</main>
+</body>
+</html>
